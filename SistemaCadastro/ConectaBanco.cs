@@ -37,6 +37,32 @@ namespace SistemaCadastro
 
         }// fim lista_generos
 
+        public DataTable listaBandas()
+        {
+            MySqlCommand cmd = new MySqlCommand("lista_banda", conexao);
+            cmd.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                conexao.Open();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable tabela = new DataTable();
+                da.Fill(tabela);
+                return tabela;
+            }// fim try
+            catch (MySqlException e)
+            {
+                mensagem = "Erro:" + e.Message;
+                return null;
+            }
+            finally
+            {
+                conexao.Close();
+            }
+
+        }// fim lista_bandas
+
+
+
         public bool insereBanda(Banda b)
         {
             MySqlCommand cmd = new MySqlCommand("insere_banda", conexao);
