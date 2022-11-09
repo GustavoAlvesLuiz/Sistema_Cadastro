@@ -89,7 +89,7 @@ namespace SistemaCadastro
             bool retorno = conecta.insereBanda(b);
             if (retorno == true)
             {
-                MessageBox.Show("Dados inseridos com sucesso!");
+                MessageBox.Show("Dados inseridos com sucesso");
             }
             else
                 lblMsgErro.Text = conecta.mensagem;
