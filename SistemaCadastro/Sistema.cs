@@ -13,6 +13,7 @@ namespace SistemaCadastro
 {
     public partial class Sistema : Form
     {
+        int idAlterar; // variavel global
 
         public Sistema()
         {
@@ -50,8 +51,15 @@ namespace SistemaCadastro
             cbGenero.DataSource = tabelaDados;
             cbGenero.DisplayMember = "genero";
             cbGenero.ValueMember = "idgenero";
+            //preenchendo cbAlteraGenero
+            cbAlteraGenero.DataSource = tabelaDados;
+            cbAlteraGenero.DisplayMember = "genero";
+            cbAlteraGenero.ValueMember = "idgenero";
+            //
             lblMsgErro.Text = con.mensagem;
             cbGenero.Text = "";
+            cbAlteraGenero.Text = "";
+
         }
 
         void listaBanda()
@@ -125,14 +133,31 @@ namespace SistemaCadastro
 
         private void btnAlterar_Click(object sender, EventArgs e)
         {
-            
+            int linha = dgBandas.CurrentRow.Index;//pega a linha selecionada
+            idAlterar = Convert.ToInt32(dgBandas.Rows[linha].Cells["idbandas"].Value.ToString());
+            txtAlteraNome.Text = dgBandas.Rows[linha].Cells["nome"].Value.ToString();
+            txtAlteraIntegrantes.Text = dgBandas.Rows[linha].Cells["integrantes"].Value.ToString();
+            txtAlteraRanking.Text = dgBandas.Rows[linha].Cells["ranking"].Value.ToString();
+            cbAlteraGenero.Text = dgBandas.Rows[linha].Cells["genero"].Value.ToString();
+
         }
 
-         private void btnConfirmaAlteracao_Click(object sender, EventArgs e)
+        private void btnConfirmaAlteracao_Click(object sender, EventArgs e)
         {
-            
+            Banda b = new Banda();
+            b.Nome = txtAlteraNome.Text;
+            b.Ranking = Convert.ToInt32(txtAlteraRanking.Text);
+            b.Integrantes = Convert.ToInt32(txtAlteraIntegrantes.Text);
+            b.Genero = Convert.ToInt32(cbAlteraGenero.SelectedValue.ToString());
+            // nvia os dados para alterar
+            ConectaBanco conecta = new ConectaBanco();
+            bool retorno = conecta.alteraBanda(b, idAlterar);
+            if (retorno)
+                MessageBox.Show("Dados alteradoss com sucesso");
+            else
+                lblMsgErro.Text = conecta.mensagem;
 
-
+            listaBanda();
         }
 
         private void bntAddGenero_Click(object sender, EventArgs e)
